@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Món quà 20/10 dành cho em</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<style>
+  :root{
+    --wine:#3b0a24; --plum:#5e1238; --rose:#e8567f; --blush:#ffd9e2;
+    --cream:#fff6f3; --gold:#e3b565; --ink:#4a2336;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:'Be Vietnam Pro',sans-serif; color:var(--cream);
+    background:radial-gradient(circle at 20% 10%,#7a1c4b 0%,var(--wine) 55%,#220515 100%);
+    min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px 12px;
+  }
+  #phone{
+    position:relative; width:100%; max-width:400px; height:720px; border-radius:32px; overflow:hidden;
+    background:linear-gradient(170deg,#6b1640 0%,var(--wine) 70%);
+    border:1px solid rgba(227,181,101,.45);
+    box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 0 6px rgba(255,255,255,.04);
+  }
+  #hearts{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+  .screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;padding:30px 28px;z-index:2;transition:opacity .5s ease,transform .5s ease}
+  .hidden-screen{opacity:0;pointer-events:none;transform:scale(.97)}
+  .script{font-family:'Dancing Script',cursive;font-weight:700}
+
+  /* Màn 1 */
+  #screen1{justify-content:center;text-align:center}
+  #screen1 h1{font-size:46px;line-height:1.1;color:var(--blush);text-shadow:0 2px 20px rgba(232,86,127,.6)}
+  #screen1 .sub{font-size:13.5px;color:#e9b9c9;margin:6px 0 22px}
+  .qr-wrap{
+    position:relative;width:236px;height:236px;border-radius:26px;background:#fff;padding:12px;
+    box-shadow:0 0 0 3px var(--gold),0 0 40px rgba(232,86,127,.55);
+    animation:glow 3s ease-in-out infinite;
+  }
+  @keyframes glow{50%{box-shadow:0 0 0 3px var(--gold),0 0 64px rgba(232,86,127,.85)}}
+  #qr{width:100%;height:100%;display:block}
+  #screen1 .hint-open{font-size:28px;color:var(--gold);margin:20px 0 4px}
+  .btn{
+    margin-top:12px;padding:13px 38px;border:none;border-radius:30px;cursor:pointer;color:#fff;
+    background:linear-gradient(135deg,#f06292,#c2185b);font:600 15px 'Be Vietnam Pro',sans-serif;
+    box-shadow:0 8px 24px rgba(232,86,127,.45);transition:transform .15s;display:inline-flex;align-items:center;gap:8px
+  }
+  .btn:active{transform:scale(.95)}
+  .btn:focus-visible,.key:focus-visible,.pick:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+  .pin-hint{font-size:11.5px;color:#c995ac;margin-top:14px}
+
+  /* Ảnh chọn được */
+  .pick{position:relative;cursor:pointer;overflow:hidden;border:3px solid var(--gold);background:linear-gradient(135deg,#8a2455,#5e1238);
+    display:flex;align-items:center;justify-content:center;padding:0;color:inherit}
+  .pick img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .pick .tap{position:absolute;bottom:0;left:0;right:0;font-size:10px;background:rgba(0,0,0,.45);padding:3px 0;color:#fff}
+  .pick.has .tap{display:none}
+  .avatar{width:92px;height:92px;border-radius:50%;margin-top:6px;box-shadow:0 0 30px rgba(232,86,127,.5)}
+  .photo{width:156px;height:156px;border-radius:50% 50% 50% 50%/45% 45% 55% 55%;flex-shrink:0;box-shadow:0 0 36px rgba(232,86,127,.55)}
+
+  /* Màn 2 */
+  #screen2 h2{font-size:34px;color:var(--blush);margin:16px 0 18px;text-align:center;line-height:1.2}
+  #pinBox{width:100%;max-width:280px;height:52px;border-radius:16px;background:rgba(255,255,255,.08);border:1px solid rgba(227,181,101,.4);
+    display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:20px}
+  .dot{width:13px;height:13px;border-radius:50%;border:2px solid var(--gold);transition:all .2s}
+  .dot.filled{background:var(--rose);border-color:var(--rose);box-shadow:0 0 10px var(--rose)}
+  #pad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%;max-width:280px}
+  .key{height:56px;border:none;border-radius:16px;cursor:pointer;background:rgba(255,255,255,.1);color:var(--cream);
+    font:600 20px 'Be Vietnam Pro',sans-serif;border:1px solid rgba(255,255,255,.12);transition:transform .1s,background .2s}
+  .key:active{transform:scale(.93);background:rgba(232,86,127,.5)}
+  .key.ok{background:linear-gradient(135deg,#f06292,#c2185b);border-color:transparent}
+  #pinMsg{font-size:13px;margin-top:14px;min-height:18px;font-weight:500;text-align:center}
+  .msg-err{color:#ffb3c6}.msg-ok{color:#b9f6ca}
+  @keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+  .shake{animation:shake .4s}
+
+  /* Màn 3 */
+  #screen3{overflow-y:auto;justify-content:flex-start;padding:26px 24px 30px}
+  #screen3 h2{font-size:32px;color:var(--blush);margin:16px 0 8px;text-align:center;line-height:1.2}
+  .divider{width:70px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin-bottom:14px;flex-shrink:0}
+  p.letter{font-size:14px;line-height:1.8;text-align:center;margin-bottom:10px;max-width:320px;color:#ffe9ef}
+  .sign{font-size:28px;color:var(--gold);margin:6px 0 16px}
+  #finalMsg{color:var(--blush);font-weight:600;font-size:15px;margin-top:16px;opacity:0;transition:opacity .6s;text-align:center;line-height:1.7}
+  .footer-note{text-align:center;color:#c995ac;font-size:12px;margin-top:16px;max-width:400px}
+  @media (max-width:420px){#phone{height:calc(100vh - 80px);min-height:620px}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+  <div id="phone">
+    <canvas id="hearts"></canvas>
+
+    <!-- MÀN 1: MÃ QR -->
+    <div id="screen1" class="screen">
+      <h1 class="script">Happy Women's Day</h1>
+      <p class="sub">Một món quà nhỏ dành riêng cho em</p>
+      <div class="qr-wrap"><canvas id="qr" width="440" height="440" aria-label="Mã QR mở món quà"></canvas></div>
+      <p class="script hint-open">Quét QR để mở món quà</p>
+      <button id="btnOpen" class="btn">Mở quà ngay</button>
+      <p class="pin-hint">Gợi ý mật mã: ngày 20/10 (2010)</p>
+    </div>
+
+    <!-- MÀN 2: MẬT MÃ -->
+    <div id="screen2" class="screen hidden-screen">
+      <button class="pick avatar" type="button" data-pick aria-label="Chọn ảnh"><span class="tap">Chạm để chọn ảnh</span></button>
+      <h2 class="script">Nhập mật mã để mở nào!</h2>
+      <div id="pinBox"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+      <div id="pad"></div>
+      <p id="pinMsg" role="status"></p>
+    </div>
+
+    <!-- MÀN 3: THƯ TÌNH -->
+    <div id="screen3" class="screen hidden-screen">
+      <button class="pick photo" type="button" data-pick aria-label="Chọn ảnh"><span class="tap">Chạm để chọn ảnh</span></button>
+      <h2 class="script" id="title">Happy Women's Day, Kim Ngân</h2>
+      <div class="divider"></div>
+      <p class="letter">Em là điều tuyệt vời nhất xảy đến với anh. Cảm ơn em vì đã đến, vì những nụ cười và cái ôm ấm áp khiến những ngày bình thường của anh cũng trở nên đặc biệt hơn.</p>
+      <p class="letter">Cảm ơn em vì những lúc vui vẻ, những lúc cùng nhau sẻ chia và cả những khi em vẫn kiên nhẫn ở bên anh. Anh mong cô gái của anh sẽ luôn vui vẻ, luôn xinh đẹp và được yêu thương thật nhiều, không chỉ hôm nay mà là tất cả những ngày về sau.</p>
+      <p class="script sign">Yêu em rất nhiều!</p>
+      <button id="btnLove" class="btn">Nhận yêu thương ✨</button>
+      <p id="finalMsg">Chúc mừng ngày 20/10!<br>Người con gái xinh đẹp của anh.</p>
+    </div>
+  </div>
+  <input type="file" id="file" accept="image/*" hidden>
+  <p class="footer-note">Mở file bằng trình duyệt. Sửa tên, ảnh, mật mã và lời thư ở phần CẤU HÌNH trong mã nguồn.</p>
+
+<script>
+(function(){
+  /* ====== CẤU HÌNH ====== */
+  var CONFIG = {
+    pin: '2010',                 // mật mã mở quà
+    photoUrl: '',                // dán link ảnh hoặc tên file ảnh (vd: 'anh.jpg'). Để trống = chạm vào khung để chọn ảnh
+    qrText: 'https://github.com/trungrk247/vong_quay.githttps://trungrk247.github.io/vong_quay/'  // link mà mã QR mở ra khi quét
+  };
+  /* ======================= */
+
+  // ---- Ảnh ----
+  var picks = document.querySelectorAll('[data-pick]'), fileInput = document.getElementById('file');
+  function setPhoto(src){
+    picks.forEach(function(p){
+      var old = p.querySelector('img'); if(old) old.remove();
+      var im = new Image(); im.src = src; im.alt = ''; p.insertBefore(im, p.firstChild); p.classList.add('has');
+    });
+  }
+  if(CONFIG.photoUrl) setPhoto(CONFIG.photoUrl);
+  picks.forEach(function(p){ p.addEventListener('click', function(){ fileInput.click(); }); });
+  fileInput.addEventListener('change', function(){
+    var f = fileInput.files[0]; if(!f) return;
+    var r = new FileReader(); r.onload = function(){ setPhoto(r.result); }; r.readAsDataURL(f);
+  });
+
+  // ---- Trái tim bay ----
+  var cv = document.getElementById('hearts'), ctx = cv.getContext('2d'), dpr = window.devicePixelRatio || 1;
+  function resize(){ cv.width = cv.clientWidth*dpr; cv.height = cv.clientHeight*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
+  resize(); window.addEventListener('resize', resize);
+  var hearts = [], burst = false, colors = ['#ff9bb8','#f06292','#e8567f','#ffd9e2','#e3b565'];
+  function drawHeart(x,y,s,c,a){
+    ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = c; ctx.translate(x,y); ctx.scale(s/30,s/30);
+    ctx.beginPath(); ctx.moveTo(0,8); ctx.bezierCurveTo(-14,-6,-12,-18,0,-10); ctx.bezierCurveTo(12,-18,14,-6,0,8); ctx.fill(); ctx.restore();
+  }
+  function spawn(n){
+    for(var i=0;i<n;i++) hearts.push({x:Math.random()*cv.clientWidth,y:cv.clientHeight+20,size:8+Math.random()*16,speed:.4+Math.random()*1.1,
+      sway:Math.random()*6.28,ss:.02+Math.random()*.03,alpha:.25+Math.random()*.45,color:colors[Math.floor(Math.random()*colors.length)]});
+  }
+  spawn(16);
+  (function loop(){
+    ctx.clearRect(0,0,cv.clientWidth,cv.clientHeight);
+    for(var i=hearts.length-1;i>=0;i--){
+      var h = hearts[i]; h.y -= h.speed; h.sway += h.ss;
+      drawHeart(h.x+Math.sin(h.sway)*18,h.y,h.size,h.color,h.alpha);
+      if(h.y < -30){ hearts.splice(i,1); if(!burst) spawn(1); }
+    }
+    if(burst && hearts.length < 55) spawn(2);
+    requestAnimationFrame(loop);
+  })();
+
+  // ---- Mã QR thật (quét được), trang trí bo tròn + trái tim ở giữa ----
+  function rr(c,x,y,w,h,r){ c.beginPath(); c.moveTo(x+r,y); c.arcTo(x+w,y,x+w,y+h,r); c.arcTo(x+w,y+h,x,y+h,r); c.arcTo(x,y+h,x,y,r); c.arcTo(x,y,x+w,y,r); c.closePath(); }
+  function heartPath(c,cx,cy,s){
+    c.beginPath(); c.moveTo(cx,cy+s*.9); c.bezierCurveTo(cx-s*1.6,cy-s*.2,cx-s*1.1,cy-s*1.4,cx,cy-s*.6);
+    c.bezierCurveTo(cx+s*1.1,cy-s*1.4,cx+s*1.6,cy-s*.2,cx,cy+s*.9); c.closePath();
+  }
+  function drawQR(){
+    var cvq = document.getElementById('qr'), c = cvq.getContext('2d'), W = cvq.width;
+    c.clearRect(0,0,W,W);
+    if(typeof qrcode === 'undefined'){ c.fillStyle='#c2185b'; c.font='20px sans-serif'; c.textAlign='center'; c.fillText('Không tải được mã QR',W/2,W/2); return; }
+    var hosted = location.protocol.indexOf('http') === 0;
+    var text = CONFIG.qrText || (hosted ? location.href.split('#')[0] + '#mo-qua' : 'Happy Women\'s Day 20/10 - Yêu em rất nhiều!');
+    if(!CONFIG.qrText && !hosted){
+      document.querySelector('.footer-note').innerHTML = '⚠️ Bạn đang mở file trực tiếp từ máy nên mã QR chưa trỏ tới trang web. Hãy đưa file lên mạng (GitHub Pages, Netlify...) rồi mở bằng link đó, mã QR sẽ tự dẫn tới trang nhập mật mã.';
+    }
+    var qr = qrcode(0,'H'); qr.addData(text); qr.make();
+    var n = qr.getModuleCount(), cs = W/n;
+    var g = c.createLinearGradient(0,0,W,W); g.addColorStop(0,'#e8567f'); g.addColorStop(1,'#7a1c4b'); c.fillStyle = g;
+    function finder(r,col){ return (r<7&&col<7)||(r<7&&col>=n-7)||(r>=n-7&&col<7); }
+    for(var r=0;r<n;r++) for(var col=0;col<n;col++){
+      if(!qr.isDark(r,col) || finder(r,col)) continue;
+      var dx = col-n/2+.5, dy = r-n/2+.5; if(Math.sqrt(dx*dx+dy*dy) < n*.14) continue; // chừa chỗ cho trái tim
+      c.beginPath(); c.arc(col*cs+cs/2,r*cs+cs/2,cs*.43,0,6.283); c.fill();
+    }
+    [[0,0],[0,n-7],[n-7,0]].forEach(function(p){
+      var x = p[1]*cs, y = p[0]*cs;
+      c.fillStyle = g; rr(c,x,y,7*cs,7*cs,cs*2); c.fill();
+      c.fillStyle = '#fff'; rr(c,x+cs,y+cs,5*cs,5*cs,cs*1.4); c.fill();
+      c.fillStyle = g; rr(c,x+2*cs,y+2*cs,3*cs,3*cs,cs); c.fill();
+    });
+    c.fillStyle = '#fff'; heartPath(c,W/2,W/2,cs*3.4); c.fill();
+    c.fillStyle = '#e8567f'; heartPath(c,W/2,W/2,cs*2.7); c.fill();
+  }
+  drawQR();
+
+  // ---- Chuyển màn ----
+  var s1 = document.getElementById('screen1'), s2 = document.getElementById('screen2'), s3 = document.getElementById('screen3');
+  function show(el){ [s1,s2,s3].forEach(function(x){ x.classList.add('hidden-screen'); }); el.classList.remove('hidden-screen'); }
+  document.getElementById('btnOpen').addEventListener('click', function(){ show(s2); });
+  // Quét QR -> link có #mo-qua -> vào thẳng màn nhập mật mã
+  if(location.hash === '#mo-qua') show(s2);
+
+  // ---- Bàn phím mật mã ----
+  var pin = '', dots = document.querySelectorAll('.dot'), pad = document.getElementById('pad'),
+      msg = document.getElementById('pinMsg'), box = document.getElementById('pinBox');
+  ['1','2','3','4','5','6','7','8','9','C','0','OK'].forEach(function(k){
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'key' + (k==='OK'?' ok':''); b.textContent = k;
+    b.addEventListener('click', function(){ press(k); }); pad.appendChild(b);
+  });
+  function render(){ dots.forEach(function(d,i){ d.classList.toggle('filled', i < pin.length); }); }
+  function press(k){
+    if(k === 'C'){ pin = ''; render(); msg.textContent = ''; return; }
+    if(k === 'OK'){
+      if(pin === CONFIG.pin){
+        msg.textContent = 'Đúng rồi! Đang mở quà...'; msg.className = 'msg-ok';
+        setTimeout(function(){ show(s3); burst = true; spawn(30); }, 700);
+      } else {
+        msg.textContent = 'Sai mật mã rồi, thử lại nhé!'; msg.className = 'msg-err';
+        box.classList.add('shake'); setTimeout(function(){ box.classList.remove('shake'); }, 450);
+        pin = ''; render();
+      }
+      return;
+    }
+    if(pin.length < 4){ pin += k; render(); msg.textContent = ''; }
+  }
+  document.addEventListener('keydown', function(e){
+    if(s2.classList.contains('hidden-screen')) return;
+    if(/^[0-9]$/.test(e.key)) press(e.key); else if(e.key === 'Backspace'){ pin = pin.slice(0,-1); render(); } else if(e.key === 'Enter') press('OK');
+  });
+
+  // ---- Nhận yêu thương ----
+  document.getElementById('btnLove').addEventListener('click', function(){
+    burst = true; spawn(40); document.getElementById('finalMsg').style.opacity = 1;
+  });
+})();
+</script>
+</body>
+</html>
